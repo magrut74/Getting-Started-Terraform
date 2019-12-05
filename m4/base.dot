@@ -1,0 +1,55 @@
+digraph {
+	compound = "true"
+	newrank = "true"
+	subgraph "root" {
+		"[root] aws_instance.nginx1" [label = "aws_instance.nginx1", shape = "box"]
+		"[root] aws_internet_gateway.igw" [label = "aws_internet_gateway.igw", shape = "box"]
+		"[root] aws_route_table.rtb" [label = "aws_route_table.rtb", shape = "box"]
+		"[root] aws_route_table_association.rta-subnet1" [label = "aws_route_table_association.rta-subnet1", shape = "box"]
+		"[root] aws_security_group.nginx-sg" [label = "aws_security_group.nginx-sg", shape = "box"]
+		"[root] aws_subnet.subnet1" [label = "aws_subnet.subnet1", shape = "box"]
+		"[root] aws_vpc.vpc" [label = "aws_vpc.vpc", shape = "box"]
+		"[root] data.aws_ami.aws-linux" [label = "data.aws_ami.aws-linux", shape = "box"]
+		"[root] data.aws_availability_zones.available" [label = "data.aws_availability_zones.available", shape = "box"]
+		"[root] output.aws_instance_public_dns" [label = "output.aws_instance_public_dns", shape = "note"]
+		"[root] provider.aws" [label = "provider.aws", shape = "diamond"]
+		"[root] var.aws_access_key" [label = "var.aws_access_key", shape = "note"]
+		"[root] var.aws_secret_key" [label = "var.aws_secret_key", shape = "note"]
+		"[root] var.key_name" [label = "var.key_name", shape = "note"]
+		"[root] var.network_address_space" [label = "var.network_address_space", shape = "note"]
+		"[root] var.private_key_path" [label = "var.private_key_path", shape = "note"]
+		"[root] var.region" [label = "var.region", shape = "note"]
+		"[root] var.subnet1_address_space" [label = "var.subnet1_address_space", shape = "note"]
+		"[root] aws_instance.nginx1" -> "[root] aws_security_group.nginx-sg"
+		"[root] aws_instance.nginx1" -> "[root] aws_subnet.subnet1"
+		"[root] aws_instance.nginx1" -> "[root] data.aws_ami.aws-linux"
+		"[root] aws_instance.nginx1" -> "[root] provisioner.remote-exec"
+		"[root] aws_instance.nginx1" -> "[root] var.key_name"
+		"[root] aws_internet_gateway.igw" -> "[root] aws_vpc.vpc"
+		"[root] aws_route_table.rtb" -> "[root] aws_internet_gateway.igw"
+		"[root] aws_route_table_association.rta-subnet1" -> "[root] aws_route_table.rtb"
+		"[root] aws_route_table_association.rta-subnet1" -> "[root] aws_subnet.subnet1"
+		"[root] aws_security_group.nginx-sg" -> "[root] aws_vpc.vpc"
+		"[root] aws_subnet.subnet1" -> "[root] aws_vpc.vpc"
+		"[root] aws_subnet.subnet1" -> "[root] data.aws_availability_zones.available"
+		"[root] aws_subnet.subnet1" -> "[root] var.subnet1_address_space"
+		"[root] aws_vpc.vpc" -> "[root] provider.aws"
+		"[root] aws_vpc.vpc" -> "[root] var.network_address_space"
+		"[root] data.aws_ami.aws-linux" -> "[root] provider.aws"
+		"[root] data.aws_availability_zones.available" -> "[root] provider.aws"
+		"[root] meta.count-boundary (EachMode fixup)" -> "[root] aws_route_table_association.rta-subnet1"
+		"[root] meta.count-boundary (EachMode fixup)" -> "[root] output.aws_instance_public_dns"
+		"[root] meta.count-boundary (EachMode fixup)" -> "[root] var.private_key_path"
+		"[root] output.aws_instance_public_dns" -> "[root] aws_instance.nginx1"
+		"[root] provider.aws (close)" -> "[root] aws_instance.nginx1"
+		"[root] provider.aws (close)" -> "[root] aws_route_table_association.rta-subnet1"
+		"[root] provider.aws" -> "[root] var.aws_access_key"
+		"[root] provider.aws" -> "[root] var.aws_secret_key"
+		"[root] provider.aws" -> "[root] var.region"
+		"[root] provisioner.remote-exec (close)" -> "[root] aws_instance.nginx1"
+		"[root] root" -> "[root] meta.count-boundary (EachMode fixup)"
+		"[root] root" -> "[root] provider.aws (close)"
+		"[root] root" -> "[root] provisioner.remote-exec (close)"
+	}
+}
+
